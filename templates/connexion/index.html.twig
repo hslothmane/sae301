@@ -1,0 +1,19 @@
+{# templates/connexion/index.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-quiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+    <script src="main.js" defer></script>
+    <title>Connexion / Inscription</title>
+</head>
+{% block body %}
+    {% include 'header.html.twig' %}
+    {% include 'connexion/_form.html.twig' %}
+{% endblock %}
+</html>

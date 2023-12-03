@@ -8,3 +8,7 @@ controllers:
 home:
     path: /
     controller: App\Controller\IndexController::index
+
+connexion:
+    path: /connexion
+    controller: App\Controller\ConnexionController::index
