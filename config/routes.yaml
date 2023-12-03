@@ -12,3 +12,11 @@ home:
 connexion:
     path: /connexion
     controller: App\Controller\ConnexionController::index
+
+etudiant:
+    path: /etudiant
+    controller: App\Controller\EtudiantController::index
+
+tache:
+    path: /tache
+    controller: App\Controller\TacheController::index

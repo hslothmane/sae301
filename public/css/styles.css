@@ -11,7 +11,7 @@ body {
     width: 100%;
     top: 0;
     z-index: 1000;
-    transition: top 0.3s;
+    transition: top 0.3s;   
 }
 
 .header-head {
@@ -44,6 +44,40 @@ nav a {
 
 nav a:hover {
     color: #007BFF;
+}
+
+/* Ajoutez ces styles dans votre fichier styles.css ou un autre fichier de styles que vous utilisez */
+
+/* Style pour le label du champ de choix */
+.form-label {
+    font-size: 1rem;
+    color: #3498db; /* Couleur bleue */
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Style pour le champ de choix lui-même */
+.form-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 2px solid #3498db; /* Bordure bleue plus épaisse */
+    border-radius: 8px; /* Coins arrondis */
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: #ecf0f1; /* Couleur de fond gris pâle */
+    color: #555; /* Couleur du texte plus sombre */
+    transition: border-color 0.3s ease; /* Animation de transition pour la bordure */
+}
+
+/* Effet de survol pour le champ de choix */
+.form-select:hover {
+    border-color: #2980b9; /* Changement de couleur de bordure au survol */
+}
+
+/* Style pour les options du champ de choix */
+.form-select option {
+    font-size: 1rem;
 }
 
 @media (max-width: 768px) {
