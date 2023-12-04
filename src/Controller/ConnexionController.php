@@ -38,6 +38,6 @@ class ConnexionController extends AbstractController
         }
 
         // Par défaut, redirigez vers la page d'accueil
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('connexion');
     }
 }
