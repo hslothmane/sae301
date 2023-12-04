@@ -1,11 +1,9 @@
 <div class="header-container-head">
         <header class="header-head">
-            <a href="index.php"><img src="imgs/logo.svg" alt="logo" class="logo"></a>
+                    <a href="{{ path('home') }}"><img src="{{ asset('imgs/logo.svg') }}" alt="logo" class="logo"></a>
             <nav>
                 <ul>
-                    <li><a href="#">Fonctionnalités</a></li>
-                    <li><a href="#">Nous contactez</a></li>
-                    <li><a href="{{ path('connexion') }}">Connexion | Inscription</a></li>
+                       <li><a href="{{ path('connexion') }}">Connexion | Inscription</a></li>
                 </ul>
             </nav>
         </header>

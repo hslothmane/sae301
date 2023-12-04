@@ -1,101 +1,57 @@
 {# templates/connexion/index.html.twig #}
+
 <!DOCTYPE html>
 <html lang="en">
 
-{% block head %}
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
-        <script src="{{ asset('js/main.js') }}" defer></script>
-        <title>Connexion / Inscription</title>
-    </head>
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <script src="{{ asset('js/main.js') }}" defer></script>
+    <title>Connexion / Inscription</title>
+</head>
 
-{% block body %}
+<body>
     {% include 'header.html.twig' %}
+    {% if app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ app.flashes('success')|first }}
+        </div>
+    {% elseif app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ app.flashes('error')|first }}
+        </div>
+    {% endif %}
 
     <div class="container-login" id="container">
         <div class="form-container sign-up-container">
-            {% block registration_form %}
-                <form class="form-login" id="form" method="POST">
-                    <h1 class="h1-login">Créer un compte</h1>
-                    <input type="text" name="username" placeholder="Username">
-                    <input type="email" name="email" placeholder="Email" id="username" required>
-                    <input type="password" name="password" placeholder="*********" id="password">
-                    <label class="form-label" for="userType">Vous êtes :</label>
-                    <select class="form-select" name="userType" id="userType" required>
-                        <option value="etudiant">Étudiant</option>
-                        <option value="professeur">Professeur</option>
-                    </select>
-                    <input type="submit" name="register" class="btn-login" value="S'inscrire">
-                </form>
-                {% if app.request.method == 'POST' and app.request.request.get('register') is defined %}
-                    {# Handle registration form submission with PHP code #}
-                    <?php
-                     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $userType = $_POST['userType'];
-
-    echo '<script>';
-    echo 'localStorage.setItem("username", "' . $username . '");';
-    echo 'localStorage.setItem("email", "' . $email . '");';
-    echo 'localStorage.setItem("password", "' . $password . '");';
-    echo 'localStorage.setItem("userType", "' . $userType . '");';
-    echo 'alert("Inscription réussie!");';
-    echo 'window.location.href = "connexion/index.html.twig";';
-    echo '</script>';
-}
-                    ?>
-                {% endif %}
-            {% endblock %}
+            <form class="form-login" id="form" method="POST" action="{{ path('connexion_process_form') }}">
+                <h1 class="h1-login">Créer un compte</h1>
+                <input type="text" name="username" placeholder="Username">
+                <input type="email" name="email" placeholder="Email" id="username" required>
+                <input type="password" name="password" placeholder="*********" id="password">
+                <label class="form-label" for="userType">Vous êtes :</label>
+                <select class="form-select" name="userType" id="userType" required>
+                    <option value="etudiant">Étudiant</option>
+                    <option value="professeur">Professeur</option>
+                </select>
+                <input type="submit" name="register" class="btn-login" value="S'inscrire">
+            </form>
         </div>
         <div class="form-container sign-in-container">
-            {% block login_form %}
-                <form class="form-login" method="POST">
-                    <h1 class="h1-login">Se connecter</h1>
-                    <input type="email" name="email" placeholder="Email">
-                    <input type="password" name="password" placeholder="*********">
-                    <label class="form-label" for="loginUserType">Vous êtes :</label>
-                    <select class="form-select" name="loginUserType" id="loginUserType" required>
-                        <option value="etudiant">Étudiant</option>
-                        <option value="professeur">Professeur</option>
-                    </select>
-                    <input type="submit" name="login" class="btn-login" value="Se connecter">
-                </form>
-                {% if app.request.method == 'POST' and app.request.request.get('login') is defined %}
-                    {# Handle login form submission with PHP code #}
-                    <?php
-                     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
- $enteredEmail = $_POST['email'];
-    $enteredPassword = $_POST['password'];
-    $enteredUserType = $_POST['loginUserType'];
-
-    echo '<script>';
-    echo 'var storedEmail = localStorage.getItem("email");';
-    echo 'var storedPassword = localStorage.getItem("password");';
-    echo 'var storedUserType = localStorage.getItem("userType");';
-    echo 'if (storedEmail === "' . $enteredEmail . '" && storedPassword === "' . $enteredPassword . '" && storedUserTyp>    echo '   if (storedUserType === "professeur") {';
-    echo '      alert("Connexion r      ussie en tant que professeur!");';
-    echo '      window.location.href = "tache/index.html.twig";';
-    echo '   } else if (storedUserType === "etudiant") {';
-    echo '      alert("Connexion r      ussie en tant qu\'      tudiant!");';
-    echo '      window.location.href = "etudiant/index.html.twig";';
-    echo '   }';
-    echo '} else {';
-    echo '   alert("Identifiants incorrects!");';
-    echo '}';
-    echo '</script>';
-}
-                    ?>
-                {% endif %}
-            {% endblock %}
+            <form class="form-login" method="POST" action="{{ path('connexion_process_form') }}">
+                <h1 class="h1-login">Se connecter</h1>
+                <input type="email" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="*********">
+                <label class="form-label" for="loginUserType">Vous êtes :</label>
+                <select class="form-select" name="loginUserType" id="loginUserType" required>
+                    <option value="etudiant">Étudiant</option>
+                    <option value="professeur">Professeur</option>
+                </select>
+                <input type="submit" name="login" class="btn-login" value="Se connecter">
+            </form>
         </div>
         <div class="overlay-container">
             <div class="overlay">
@@ -112,5 +68,6 @@
             </div>
         </div>
     </div>
-{% endblock %}
+</body>
+
 </html>

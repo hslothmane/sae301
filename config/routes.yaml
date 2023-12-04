@@ -4,14 +4,17 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-
 home:
     path: /
-    controller: App\Controller\IndexController::index
+    controller: App\Controller\HomeController::index
 
 connexion:
     path: /connexion
     controller: App\Controller\ConnexionController::index
+
+connexion_process_form:
+    path: /connexion-process-form
+    controller: App\Controller\ConnexionController::processForm
 
 etudiant:
     path: /etudiant

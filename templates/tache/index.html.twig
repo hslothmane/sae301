@@ -1,86 +1,162 @@
+{# templates/tache/index.html.twig #}
+
 <!DOCTYPE html>
 <html lang="en">
 
-{% block head %}
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>To do list</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('css/tache.css') }}">
-    </head>
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tâches Étudiant</title>
+    <link rel="stylesheet" href="{{ asset('css/tache.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
 
 <body>
-    <header class="header_dec">
-        <a href="{{ path('logout') }}" id="logout">Déconnexion</a>
-    </header>
-    <div class="app">
+        {% include 'header.html.twig' %}
+    <div class="container">
+        <h1 class="letitre">Liste des Tâches</h1>
+        <label for="tdGroupSelect">Sélectionner le groupe de TD :</label>
+        <select id="tdGroupSelect" onchange="filterTasksByTDGroup()">
+            <option value="all">Tous les groupes</option>
+            <option value="TD1">TD1</option>
+            <option value="TD2">TD2</option>
+        </select><br>
 
-    <div id="addNew" data-bs-toggle="modal" data-bs-target="#form">
-      <span>Ajouter une nouvelle tâche</span>
-      <i class="fas fa-plus"></i>
+        <label for="typeSelect">Sélectionner le type de tâche :</label>
+        <select id="typeSelect" onchange="filterTasksByType()">
+            <option value="all">Tous les types</option>
+            <option value="Rendu">Rendu</option>
+            <option value="Examen">Examen</option>
+            <option value="Rattrapage">Rattrapage</option>
+            <option value="Evenement">Événement</option>
+        </select><br>
+
+        <label for="sortOrderSelect">Sélectionner l'ordre de tri :</label>
+        <select id="sortOrderSelect" onchange="sortTasks()">
+            <option value="asc">Croissant (Récent en premier)</option>
+            <option value="desc">Décroissant (Ancien en premier)</option>
+        </select><br>
+
+        <label for="searchInput">Rechercher :</label>
+        <input type="text" id="searchInput" oninput="searchTasks()">
+        <div id="tasks"></div>
     </div>
 
-    <!-- Modal -->
-    <form class="modal fade" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ajouter une nouvelle tâche</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>Titre de la tâche</p>
-            <input type="text" class="form-control" name="" id="textInput">
-            <div id="msg"></div>
-            <br>
-            <p>Date d'échéance</p>
-            <input type="date" class="form-control" name="" id="dateInput">
-            <br>
-            <p>Délai</p>
-            <input type="time" class="form-control" name="timeInput" id="timeInput">
-            <br>
-            <p>Description</p>
-            <textarea name="" class="form-control" id="textarea" cols="30" rows="5"></textarea>
-            <br>
-            <p>Type</p>
-            <select class="form-select" name="typeInput" id="typeInput">
-              <option value="">-- Choose the type --</option>
-              <option value="Rendu">Rendu</option>
-              <option value="Examens">Examen</option>
-              <option value="Rattrapage">Rattrapage</option>
-              <option value="Evenement">Événement</option>
-            </select>
-            <br>
-            <p>Groupe de TD</p>
-            <select class="form-select" name="tdGroupInput" id="tdGroupInput">
-              <option value="">-- Choose the TD group --</option>
-              <option value="TD1">TD1</option>
-              <option value="TD2">TD2</option>
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            <button type="submit" id="add" class="btn btn-primary">Ajouter</button>
-          </div>
-        </div>
-      </div>
-    </form>
+    <div id="calendar"></div>
 
-    <h5 class="text-center my-3">Tâches</h5>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let tasksContainer = document.getElementById("tasks");
+            let data = JSON.parse(localStorage.getItem("data")) || [];
 
-    <div id="tasks"></div>
-  </div>
+            function filterTasksByTDGroup() {
+                let selectedTDGroup = document.getElementById("tdGroupSelect").value;
 
-  <script src="tache.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+                if (selectedTDGroup === "all") {
+                    displayTasks(data);
+                } else {
+                    let filteredTasks = data.filter(task => task.tdGroup === selectedTDGroup);
+                    displayTasks(filteredTasks);
+                }
+            }
+
+            function filterTasksByType() {
+                let selectedType = document.getElementById("typeSelect").value;
+
+                if (selectedType === "all") {
+                    displayTasks(data);
+                } else {
+                    let filteredTasks = data.filter(task => task.type === selectedType);
+                    displayTasks(filteredTasks);
+                }
+            }
+
+            function sortTasks() {
+                let sortOrder = document.getElementById("sortOrderSelect").value;
+
+                data.sort((a, b) => {
+                    const dateA = new Date(a.date + ' ' + a.time);
+                    const dateB = new Date(b.date + ' ' + b.time);
+
+                    if (sortOrder === 'asc') {
+                        return dateA - dateB;
+                    } else {
+                        return dateB - dateA;
+                    }
+                });
+
+                displayTasks(data);
+            }
+
+            function searchTasks() {
+                let searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+                let filteredTasks = data.filter(task =>
+                    task.text.toLowerCase().includes(searchTerm) ||
+                    task.tdGroup.toLowerCase().includes(searchTerm) ||
+                    task.type.toLowerCase().includes(searchTerm)
+                );
+
+                displayTasks(filteredTasks);
+            }
+
+            function displayTasks(tasks) {
+                tasksContainer.innerHTML = "";
+
+                tasks.forEach(task => {
+                    tasksContainer.innerHTML += `
+                        <div>
+                            <h3>${task.text}</h3>
+                            <p>Date: ${task.date}</p>
+                            <p>Heure: ${task.time}</p>
+                            <p>Description: ${task.description}</p>
+                            <p>Type: ${task.type}</p>
+                            <p>Groupe de TD: ${task.tdGroup}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            displayTasks(data);
+
+            document.getElementById("tdGroupSelect").addEventListener("change", filterTasksByTDGroup);
+            document.getElementById("typeSelect").addEventListener("change", filterTasksByType);
+            document.getElementById("sortOrderSelect").addEventListener("change", sortTasks);
+            document.getElementById("searchInput").addEventListener("input", searchTasks);
+
+            // Initialise le calendrier avec FullCalendar
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: data.map(task => ({
+                    title: task.text,
+                    start: task.date + ' ' + task.time,
+                    description: task.description
+                })),
+                eventRender: function (event, element) {
+                    let today = moment();
+                    let eventDate = moment(event.start);
+                    let daysDifference = eventDate.diff(today, 'days');
+
+                    if (daysDifference === 0) {
+                        element.addClass('red-event');
+                    } else if (daysDifference === 1) {
+                        element.addClass('orange-event');
+                    } else if (daysDifference < 0) {
+                        element.addClass('green-event');
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
 
 </html>
-
