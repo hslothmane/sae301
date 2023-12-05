@@ -14,4 +14,3 @@ class EtudiantController extends AbstractController
         return $this->render('etudiant/index.html.twig');
     }
 }
-

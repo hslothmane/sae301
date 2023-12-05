@@ -28,16 +28,12 @@ class ConnexionController extends AbstractController
         $password = $request->request->get('password');
         $userType = $request->request->get('userType');
 
-        // Effectuez le traitement nécessaire avec les données
-
-        // Redirigez l'utilisateur vers la page appropriée (à adapter selon votre logique)
         if ($userType === 'professeur') {
             return $this->redirectToRoute('tache');
         } elseif ($userType === 'etudiant') {
             return $this->redirectToRoute('etudiant');
         }
 
-        // Par défaut, redirigez vers la page d'accueil
         return $this->redirectToRoute('connexion');
     }
 }

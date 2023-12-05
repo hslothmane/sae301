@@ -1,5 +1,3 @@
-// public/js/tache.js
-
 let form = document.getElementById("form");
 let textInput = document.getElementById("textInput");
 let dateInput = document.getElementById("dateInput");
@@ -120,9 +118,7 @@ let resetForm = () => {
             localStorage.removeItem("userType");
 
             // Rediriger vers la page de connexion
-            // Rediriger vers la page de connexion en utilisant une route Symfony
-window.location.href = "{{ path('connexion') }}";
-
+            window.location.href = "connexion.php";
         });
     }
 })();
