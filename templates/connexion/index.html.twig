@@ -28,8 +28,7 @@
     <div class="container-login" id="container">
         <div class="form-container sign-up-container">
             <form class="form-login" id="form" method="POST" action="{{ path('connexion_process_form') }}">
-                <h1 class="h1-login">Créer un compte</h1>
-                <input type="text" name="username" placeholder="Username">
+                <h1 class="h1-login">Se connecter</h1>
                 <input type="email" name="email" placeholder="Email" id="username" required>
                 <input type="password" name="password" placeholder="*********" id="password">
                 <label class="form-label" for="userType">Vous êtes :</label>
@@ -37,12 +36,12 @@
                     <option value="etudiant">Étudiant</option>
                     <option value="professeur">Professeur</option>
                 </select>
-                <input type="submit" name="register" class="btn-login" value="S'inscrire">
+                <input type="submit" name="register" class="btn-login" value="Se connecter">
             </form>
         </div>
         <div class="form-container sign-in-container">
             <form class="form-login" method="POST" action="{{ path('connexion_process_form') }}">
-                <h1 class="h1-login">Se connecter</h1>
+                <h1 class="h1-login">Creer un compte</h1>
                 <input type="email" name="email" placeholder="Email">
                 <input type="password" name="password" placeholder="*********">
                 <label class="form-label" for="loginUserType">Vous êtes :</label>
@@ -50,20 +49,20 @@
                     <option value="etudiant">Étudiant</option>
                     <option value="professeur">Professeur</option>
                 </select>
-                <input type="submit" name="login" class="btn-login" value="Se connecter">
+                <input type="submit" name="login" class="btn-login" value="S'inscrire">
             </form>
         </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1>Bienvenue !</h1>
-                    <p class="p-login">Commencez votre aventure en créant un compte.</p>
-                    <button class="press btn-login" id="signIn">Se connecter</button>
+                    <p class="p-login">Connectez-vous.</p>
+                    <button class="press btn-login" id="signIn">S'inscrire</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Bon retour</h1>
-                    <p class="p-login">Connectez-vous avec votre compte.</p>
-                    <button class="press btn-login" id="signUp">S'inscrire</button>
+                    <p class="p-login">Commencez votre aventure en créant un compte.</p>
+                    <button class="press btn-login" id="signUp">Se connecter</button>
                 </div>
             </div>
         </div>

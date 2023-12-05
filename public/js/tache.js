@@ -10,115 +10,96 @@ let typeInput = document.getElementById("typeInput");
 let tdGroupInput = document.getElementById("tdGroupInput");
 
 form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    formValidation();
+  e.preventDefault();
+  formValidation();
 });
 
 let formValidation = () => {
-    if (textInput.value === "") {
-        console.log("failure");
-        msg.innerHTML = "Task cannot be blank";
-    } else {
-        console.log("success");
-        msg.innerHTML = "";
-        acceptData();
-        add.setAttribute("data-bs-dismiss", "modal");
-        add.click();
+  if (textInput.value === "") {
+    console.log("failure");
+    msg.innerHTML = "Task cannot be blank";
+  } else {
+    console.log("success");
+    msg.innerHTML = "";
+    acceptData();
+    add.setAttribute("data-bs-dismiss", "modal");
+    add.click();
 
-        (() => {
-            add.setAttribute("data-bs-dismiss", "");
-        })();
-    }
+    (() => {
+      add.setAttribute("data-bs-dismiss", "");
+    })();
+  }
 };
 
 let data = [{}];
 
 let acceptData = () => {
-    let currentUserType = localStorage.getItem("userType");
+  data.push({
+    text: textInput.value,
+    date: dateInput.value,
+    time: timeInput.value,
+    description: textarea.value,
+    type: typeInput.value,
+    tdGroup: tdGroupInput.value,
+  });
 
-    data.push({
-        text: textInput.value,
-        date: dateInput.value,
-        time: timeInput.value,
-        description: textarea.value,
-        type: typeInput.value,
-        tdGroup: tdGroupInput.value,
-        creatorType: currentUserType, // Ajout de l'information sur le créateur
-    });
-
-    localStorage.setItem("data", JSON.stringify(data));
-    createTasks();
+  localStorage.setItem("data", JSON.stringify(data));
+  createTasks();
 };
 
 let createTasks = () => {
-    tasks.innerHTML = "";
+  tasks.innerHTML = "";
+  data.map((x, y) => {
+    return (tasks.innerHTML += `
+    <div id=${y}>
+      <span class="fw-bold">${x.text}</span>
+      <span class="small text-secondary">${x.date} ${x.time}</span>
+      <p>${x.description}</p>
+      <p>Type: ${x.type}</p>
+      <p>Groupe de TD: ${x.tdGroup}</p>
 
-    data.forEach((task, index) => {
-        tasks.innerHTML += `
-            <div id="task_${index}" class="task">
-                <span class="fw-bold">${task.text}</span>
-                <span class="small text-secondary">${task.date} ${task.time}</span>
-                <p>${task.description}</p>
-                <p>Type: ${task.type}</p>
-                <p>Groupe de TD: ${task.tdGroup}</p>
-                <span class="options">
-                    <i onClick="editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
-                    <i onClick="deleteTask(this);createTasks()" class="fas fa-trash-alt"></i>
-                </span>
-            </div>
-        `;
-    });
+      <span class="options">
+        <i onClick="editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
+        <i onClick="deleteTask(this);createTasks()" class="fas fa-trash-alt"></i>
+      </span>
+    </div>
+    `);
+  });
 
-    resetForm();
+  resetForm();
 };
 
 let deleteTask = (e) => {
-    e.parentElement.parentElement.remove();
-    data.splice(e.parentElement.parentElement.id.split('_')[1], 1);
-    localStorage.setItem("data", JSON.stringify(data));
-    console.log(data);
+  e.parentElement.parentElement.remove();
+  data.splice(e.parentElement.parentElement.id, 1);
+  localStorage.setItem("data", JSON.stringify(data));
+  console.log(data);
 };
 
 let editTask = (e) => {
-    let selectedTask = e.parentElement.parentElement;
+  let selectedTask = e.parentElement.parentElement;
 
-    textInput.value = selectedTask.children[0].innerHTML;
-    dateInput.value = selectedTask.children[1].innerHTML.split(' ')[0];
-    timeInput.value = selectedTask.children[1].innerHTML.split(' ')[1];
-    textarea.value = selectedTask.children[2].innerHTML;
-    typeInput.value = selectedTask.querySelector("p:nth-child(4)").innerHTML.replace("Type: ", "");
-    tdGroupInput.value = selectedTask.querySelector("p:nth-child(5)").innerHTML.replace("Groupe de TD: ", "");
+  textInput.value = selectedTask.children[0].innerHTML;
+  dateInput.value = selectedTask.children[1].innerHTML.split(' ')[0];
+  timeInput.value = selectedTask.children[1].innerHTML.split(' ')[1];
+  textarea.value = selectedTask.children[2].innerHTML;
+  typeInput.value = selectedTask.querySelector("p:nth-child(4)").innerHTML.replace("Type: ", "");
+  tdGroupInput.value = selectedTask.querySelector("p:nth-child(5)").innerHTML.replace("Groupe de TD: ", "");
 
-    deleteTask(e);
+  deleteTask(e);
 };
 
 let resetForm = () => {
-    textInput.value = "";
-    dateInput.value = "";
-    timeInput.value = "";
-    textarea.value = "";
-    typeInput.value = "";
-    tdGroupInput.value = "";
+  textInput.value = "";
+  dateInput.value = "";
+  timeInput.value = "";
+  textarea.value = "";
+  typeInput.value = "";
+  tdGroupInput.value = "";
 };
 
 (() => {
-    data = JSON.parse(localStorage.getItem("data")) || [];
-    console.log(data);
-
-    createTasks();
-
-    // Ajout du gestionnaire d'événements pour le lien de déconnexion
-    let logoutLink = document.getElementById("logout");
-    if (logoutLink) {
-        logoutLink.addEventListener("click", () => {
-            // Supprimer les données de l'utilisateur lors de la déconnexion
-            localStorage.removeItem("username");
-            localStorage.removeItem("email");
-            localStorage.removeItem("password");
-            localStorage.removeItem("userType");
-
-            // Rediriger vers la page de connexion
-            window.location.href = "connexion.php";
-        });
-    }
+  data = JSON.parse(localStorage.getItem("data")) || [];
+  console.log(data);
+  createTasks();
 })();

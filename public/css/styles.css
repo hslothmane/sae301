@@ -31,6 +31,11 @@ nav ul {
     padding: 0;
 }
 
+.h1_home {
+margin-top : 56px;
+margin-left: 200px; 
+}
+
 nav li {
     display: inline-block;
     margin-right: 20px;
