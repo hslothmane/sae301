@@ -19,7 +19,11 @@ connexion_process_form:
 etudiant:
     path: /etudiant
     controller: App\Controller\EtudiantController::index
+    requirements:
+        _user_type: etudiant
 
 tache:
     path: /tache
     controller: App\Controller\TacheController::index
+    requirements:
+        _user_type: professeur

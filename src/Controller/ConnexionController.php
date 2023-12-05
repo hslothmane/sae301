@@ -26,14 +26,14 @@ class ConnexionController extends AbstractController
         $username = $request->request->get('username');
         $email = $request->request->get('email');
         $password = $request->request->get('password');
-        $userType = $request->request->get('userType');
+        $userType = $request->get('userType');
 
-        if ($userType === 'professeur') {
-            return $this->redirectToRoute('tache');
-        } elseif ($userType === 'etudiant') {
-            return $this->redirectToRoute('etudiant');
-        }
-
-        return $this->redirectToRoute('connexion');
+if ($userType === 'etudiant') {
+    return $this->redirectToRoute('etudiant');
+} elseif ($userType === 'professeur') {
+    return $this->redirectToRoute('tache');
+} else {
+    return $this->redirectToRoute('connexion');
+}
     }
 }
